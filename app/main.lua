@@ -7,11 +7,7 @@ local world = nil
 function love.load()
 	world = World:new()
 	world:init()
-
-	local p = Player:new():init()
-	world:addObject(p)
-	world:followObject(p)
-	world:addObject(TestGO:new():init())
+	world:loadLevel("main")
 
 	print("Setup complete...")
 end

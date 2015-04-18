@@ -52,3 +52,7 @@ end
 function GameObject:setWorld(world)
 	self.world = world
 end
+
+function GameObject:getWorld()
+	return self.world
+end

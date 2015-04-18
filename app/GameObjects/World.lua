@@ -3,9 +3,13 @@ require("GameObjects.GameObject")
 -- World or "level" object
 World = GameObject:new()
 
--- loads the given from string
-function World:loadFromString( w )
-	
+-- loads the given level
+function World:loadLevel( name )
+	self:destroy()
+	self:init()
+	print("Loading level: "..name)
+	require("levels."..name)(self)
+	package.loaded["levels."..name] = nil
 end --]]
 
 function World:init()
@@ -14,6 +18,17 @@ function World:init()
 	self.time = 0
 	self.objects = {}
 	self:followObject(nil)
+end
+
+function World:destroy()
+	GameObject.destroy(self)
+	for k,v in pairs(self.objects) do
+		k:destroy()
+	end
+
+	if self.follow then
+		self.follow:destroy()
+	end
 end
 
 -- public: adds object to world and sets world of object
