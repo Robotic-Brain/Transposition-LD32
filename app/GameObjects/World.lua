@@ -1,4 +1,5 @@
 require("GameObjects.GameObject")
+Timer = require("hump.timer")
 
 -- World or "level" object
 World = GameObject:new()
@@ -16,6 +17,7 @@ function World:init()
 	GameObject.init(self)
 	print("Initializing World")
 	self.time = 0
+	self.timer = Timer.new()
 	self.objects = {}
 	self:followObject(nil)
 end
@@ -50,6 +52,7 @@ function World:update(dt)
 		self:setPosition(-self.follow:getPosition())
 	end
 	self.time = self.time + dt
+	self.timer.update(dt)
 	for k,v in pairs(self.objects) do
 		k:update(dt)
 	end
