@@ -8,6 +8,7 @@ function Player:init()
 	GameObject.init(self)
 	self.rot = 0
 	self.speed = 100
+	self.image = love.graphics.newImage("images/Player.png")
 	return self
 end
 
@@ -17,7 +18,8 @@ function Player:draw()
 	love.graphics.translate(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	love.graphics.print("Pos: "..tostring(self.pos), 0, 0)
 	love.graphics.rotate(self.rot)
-	love.graphics.rectangle("fill", 0, 0, 30, 10)
+	love.graphics.translate(-16,-16)
+	love.graphics.draw(self.image)
 	love.graphics.pop()
 end
 
