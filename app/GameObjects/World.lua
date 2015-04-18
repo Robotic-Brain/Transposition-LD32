@@ -1,4 +1,4 @@
-require("GameObject")
+require("GameObjects.GameObject")
 
 -- World or "level" object
 World = GameObject:new()
@@ -12,9 +12,6 @@ function World:init()
 	GameObject.init(self)
 	print("Initializing World")
 	self.time = 0
-	self.cam = {}
-	self.cam.x = 0
-	self.cam.y = 0
 	self.objects = {}
 end
 

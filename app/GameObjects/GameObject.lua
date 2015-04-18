@@ -12,6 +12,7 @@ end
 function GameObject:init()
 	print("Initializing GameObject")
 	self.pos = {x = 0, y = 0}
+	return self
 end
 
 -- public: physics update

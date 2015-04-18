@@ -1,4 +1,4 @@
-require("GameObject")
+require("GameObjects.GameObject")
 
 TestGO = GameObject:new()
 

@@ -1,11 +1,14 @@
-require("world")
+require("GameObjects.World")
 require("GameObjects.TestGO")
+require("GameObjects.Player")
 
 local world = nil
 
 function love.load()
 	world = World:new()
 	world:init()
+
+	world:addObject(Player:new():init())
 
 	print("Setup complete...")
 end
@@ -15,8 +18,5 @@ function love.update( dt )
 end
 
 function love.draw()
-	local o = TestGO:new()
-	world:addObject(o)
 	world:draw()
-	o:destroy()
 end
