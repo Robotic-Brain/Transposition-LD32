@@ -8,7 +8,9 @@ function love.load()
 	world = World:new()
 	world:init()
 
-	world:addObject(Player:new():init())
+	local p = Player:new():init()
+	world:addObject(p)
+	world:followObject(p)
 	world:addObject(TestGO:new():init())
 
 	print("Setup complete...")

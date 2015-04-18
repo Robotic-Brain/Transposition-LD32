@@ -13,7 +13,7 @@ end
 -- public: resets GameObject to initial state
 function GameObject:init()
 	print("Initializing GameObject")
-	self.pos = Vector.new()
+	self:setPosition(Vector.new())
 	return self
 end
 
@@ -35,6 +35,10 @@ end
 
 function GameObject:getPosition()
 	return self.pos
+end
+
+function GameObject:move(vec)
+	self:setPosition(self:getPosition() + vec)
 end
 
 -- public: removes object from world and destroys it
