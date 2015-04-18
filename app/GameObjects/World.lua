@@ -1,5 +1,6 @@
 require("GameObjects.GameObject")
 Timer = require("hump.timer")
+require("Physics")
 
 -- World or "level" object
 World = GameObject:new()
@@ -19,6 +20,7 @@ function World:init()
 	self.time = 0
 	self.timer = Timer.new()
 	self.objects = {}
+	self.physics = Physics:new():init()
 	self:followObject(nil)
 end
 
@@ -48,6 +50,7 @@ end
 
 -- public: update all Gameobjects added to world
 function World:update(dt)
+	self.physics:update(dt)
 	if self.follow then
 		self:setPosition(-self.follow:getPosition())
 	end

@@ -51,6 +51,11 @@ end
 -- protected: Should only be called by World
 function GameObject:setWorld(world)
 	self.world = world
+	self:onAddedToWorld()
+end
+
+function GameObject:onAddedToWorld()
+	print("OnWorldAdded: "..tostring(self))
 end
 
 function GameObject:getWorld()

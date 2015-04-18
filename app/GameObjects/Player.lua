@@ -1,6 +1,7 @@
 require("GameObjects.GameObject")
 Vector = require("hump.vector")
 require("InputManager")
+require("Collider")
 
 Player = GameObject:new()
 
@@ -10,6 +11,12 @@ function Player:init()
 	self.speed = 100
 	self.image = love.graphics.newImage("images/Player.png")
 	return self
+end
+
+function Player:onAddedToWorld()
+	GameObject.onAddedToWorld(self)
+	self.collider = Collider:newCircle(10)
+	self:getWorld().physics:addCollider(self.collider)
 end
 
 function Player:draw()
@@ -29,4 +36,5 @@ function Player:update(dt)
 	self.rot = (b - (a / 2)):angleTo()
 
 	self:move(InputManager.getMovement() * self.speed * dt)
+	self.collider:setPosition(self:getPosition())
 end
