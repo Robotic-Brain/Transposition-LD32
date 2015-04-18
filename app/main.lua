@@ -9,6 +9,7 @@ function love.load()
 	world:init()
 
 	world:addObject(Player:new():init())
+	world:addObject(TestGO:new():init())
 
 	print("Setup complete...")
 end

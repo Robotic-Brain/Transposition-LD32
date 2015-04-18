@@ -33,6 +33,10 @@ function GameObject:setPosition(x, y)
 	self.pos.y = y
 end
 
+function GameObject:getPosition()
+	return self.pos.x, self.pos.y
+end
+
 -- public: removes object from world and destroys it
 function GameObject:destroy()
 	if (self.world ~= nil) then
