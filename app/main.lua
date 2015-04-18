@@ -6,6 +6,8 @@ local world = nil
 function love.load()
 	world = World:new()
 	world:init()
+
+	print("Setup complete...")
 end
 
 function love.update( dt )
