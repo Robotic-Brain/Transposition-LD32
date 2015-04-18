@@ -22,7 +22,6 @@ end
 function Player:draw()
 	love.graphics.push()
 	love.graphics.translate(self.pos:unpack())
-	love.graphics.translate(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	love.graphics.print("Pos: "..tostring(self.pos), 0, 0)
 	love.graphics.rotate(self.rot)
 	love.graphics.translate(-16,-16)

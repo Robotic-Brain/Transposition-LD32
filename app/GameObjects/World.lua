@@ -65,6 +65,7 @@ end
 function World:draw()
 	love.graphics.push()
 	love.graphics.translate(self.pos:unpack())
+	love.graphics.translate(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	for k,v in pairs(self.objects) do
 		k:draw()
 	end
