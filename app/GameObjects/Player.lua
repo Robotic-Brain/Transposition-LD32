@@ -1,5 +1,4 @@
 require("GameObjects.GameObject")
-require("Util.Vector")
 Vector = require("hump.vector")
 
 Player = GameObject:new()
@@ -28,5 +27,5 @@ function Player:update(dt)
 end
 
 function Player:move(vec)
-	self:setPosition((Vector.new(self:getPosition()) + vec):unpack())
+	self:setPosition(self:getPosition() + vec)
 end

@@ -1,3 +1,5 @@
+Vector = require("hump.vector")
+
 GameObject = {}
 
 -- public: create new game object
@@ -11,7 +13,7 @@ end
 -- public: resets GameObject to initial state
 function GameObject:init()
 	print("Initializing GameObject")
-	self.pos = {x = 0, y = 0}
+	self.pos = Vector.new()
 	return self
 end
 
@@ -27,14 +29,12 @@ end
 
 -- public: Sets position
 -- every GameObject MUST have a position
-function GameObject:setPosition(x, y)
-	self.pos = self.pos or {}
-	self.pos.x = x
-	self.pos.y = y
+function GameObject:setPosition(vec)
+	self.pos = vec
 end
 
 function GameObject:getPosition()
-	return self.pos.x, self.pos.y
+	return self.pos
 end
 
 -- public: removes object from world and destroys it
