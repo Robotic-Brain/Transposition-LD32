@@ -1,7 +1,10 @@
 return function (world)
 	local p = Player:new():init()
 	world:addObject(p)
-	world:followObject(p)
+
+	local cam = GameObject:new():init():setPosition(Vector.new(love.graphics.getDimensions())/2)
+	--world:addObject(cam)
+	world:followObject(cam)
 	p:setPosition(Vector.new(100, 100))
 
 	--world:addObject(GridGO:new():init())
@@ -27,12 +30,4 @@ return function (world)
 	love.graphics.setLineWidth(lw)
 	love.graphics.setColor(r,g,b,a)
 	l:setDrawable(c)
-
-	l:buildBackground(10, 5,
-		1,2,3,4,5,6,7,1,1,1,
-		1,1,5,1,1,1,1,1,1,1,
-		1,1,1,1,1,7,1,1,1,1,
-		1,1,1,1,1,8,1,1,1,1,
-		1,1,1,1,1,8,1,1,1,1
-		)
 end

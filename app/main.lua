@@ -1,3 +1,4 @@
+require("GameObjects.GameObject")
 require("GameObjects.World")
 require("GameObjects.TestGO")
 require("GameObjects.GridGO")

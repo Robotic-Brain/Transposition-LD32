@@ -84,6 +84,7 @@ function Level:buildBackground(w, h, ...)
 	end
 	love.graphics.setCanvas()
 	self:setDrawable(c)
+	self:addLineStrip(0,0, w*32,0, w*32,h*32, 0,h*32, 0,0)
 end
 
 function Level:setDrawable(d)

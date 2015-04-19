@@ -49,10 +49,12 @@ end
 -- public: Sets position
 -- every GameObject MUST have a position
 function GameObject:setPosition(vec)
+	assert(Vector.isvector(vec))
 	self.pos = vec
 	if self.collider then
 		self.collider:setPosition(self:getPosition())
 	end
+	return self
 end
 
 function GameObject:getPosition()
@@ -60,6 +62,7 @@ function GameObject:getPosition()
 end
 
 function GameObject:move(vec)
+	assert(Vector.isvector(vec))
 	self:setPosition(self:getPosition() + vec)
 end
 
