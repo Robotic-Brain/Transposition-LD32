@@ -133,7 +133,13 @@ end
 function Physics:collideCompoundAny(compound, other)
 	assert(compound.type == "compound")
 	assert(other.type ~= "compound")
-	
+	for i=1,#compound.childs do
+		local savePos = other.pos
+		other.pos = other.pos+compound.pos
+		local result = self:collide(other, compound.childs)
+		other.pos = savePos
+		if result then return true end
+	end
 end
 
 function Physics:collide(a, b)
