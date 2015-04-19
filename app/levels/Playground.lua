@@ -34,4 +34,7 @@ w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w
 
 	-- setup objects
 	world:addObject(Entity:new():init("crate"):setPosition(Vector.new(64+16, 64+16)))
+
+	-- adding exit
+	l:addExit(Vector.new(18, 18), "Menu")
 end

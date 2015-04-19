@@ -84,6 +84,17 @@ function Level:addLineStrip( ... )
 	return col
 end
 
+-- position is given in tiles
+function Level:addExit(pos, nextLevel)
+	local tz = TriggerZone:new():init(32, 32, function (o)
+		if o:getUserData():getOwner():getName() ~= "Player" then return end
+		THE_WORLD = World:new()
+		THE_WORLD:init()
+		THE_WORLD:loadLevel(nextLevel)
+	end):setPosition((pos*32)+Vector.new(16,16))
+	self:getWorld():addObject(tz)
+end
+
 -- unknown chars are ignored
 -- for mapping see on top of this file
 function Level:buildBackgroundFromText(w, h, s)
