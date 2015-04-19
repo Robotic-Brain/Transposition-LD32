@@ -124,11 +124,30 @@ function collideLineLine(a, b)
 	return false
 end
 
+function collideCompoundCompound(a, b)
+	assert(a.type == "compound")
+	assert(b.type == "compound")
+	print("Compound/Compound colission not implemented!")
+end
+
+function collideCompoundAny(compound, other)
+	assert(compound.type == "compound")
+	assert(other.type ~= "compound")
+	print("Compound/Any colission not implemented!")
+end
+
 function Physics:collide(a, b)
 	if a.pos:dist2(b.pos) >= ((a.radius+b.radius)*(a.radius+b.radius)) then
 		return false
 	end
-	if a.type == "circle" and b.type == "circle" then
+	if a.type == "compound" or b.type == "compound" then
+		if a.type == b.type then return collideCompoundCompound(a, b) else
+			local compound = (a.type == "compound") and a or b
+			local other = (a.type ~= "compound") and a or b
+			return collideCompoundAny(compound, other)
+		end
+
+	elseif a.type == "circle" and b.type == "circle" then
 		return true
 	elseif (a.type == "aabox" and b.type == "circle")
 		or (a.type == "circle" and b.type == "aabox") then

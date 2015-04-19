@@ -47,6 +47,23 @@ function Collider:newAABox(w, h)
 		radius=Vector.new(w,h):len()}
 end
 
+-- public: new Compound collider
+function Collider:newCompound()
+	local o = self:new{
+		type="compound",
+		childs={},
+		radius=0
+	}
+ 	return o
+end
+
+function Collider:addChild(c)
+	assert(self.type == "compound")
+	table.insert(self.childs, c)
+	self.radius = math.max(self.radius, c.pos:len()+c.radius)
+	return self
+end
+
 function Collider:setPosition(p)
 	self.pos = p
 	return self
