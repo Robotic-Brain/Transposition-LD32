@@ -96,10 +96,10 @@ function Physics:collideLineBox(line, box)
 	local b = Collider:newLine(p1, p2)
 	local c = Collider:newLine(p2, p3)
 	local d = Collider:newLine(p3, p0)
-	if collideLineLine(line, a) then return true end
-	if collideLineLine(line, b) then return true end
-	if collideLineLine(line, c) then return true end
-	if collideLineLine(line, d) then return true end
+	if self:collideLineLine(line, a) then return true end
+	if self:collideLineLine(line, b) then return true end
+	if self:collideLineLine(line, c) then return true end
+	if self:collideLineLine(line, d) then return true end
 	return false -- this will return false if line is fully inside of box!!
 end
 
