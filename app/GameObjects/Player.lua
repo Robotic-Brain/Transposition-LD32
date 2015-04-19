@@ -9,7 +9,7 @@ function Player:init()
 	GameObject.init(self)
 	self:setName("Player")
 	self.rot = 0
-	self.speed = 50
+	self.speed = 200
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
 	self.lastPos = self:getPosition()

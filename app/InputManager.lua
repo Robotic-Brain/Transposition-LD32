@@ -6,16 +6,21 @@ InputManager = {}
 function InputManager.getMovement()
 	local x = 0
 	local y = 0
-	if love.keyboard.isDown("a") then
+	if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
 		x = -1
-	elseif love.keyboard.isDown("d") then
+	elseif love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 		x = 1
 	end
 
-	if love.keyboard.isDown("w") then
+	if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 		y = -1
-	elseif love.keyboard.isDown("s") then
+	elseif love.keyboard.isDown("s") or love.keyboard.isDown("down") then
 		y = 1
+	end
+
+	if love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift") then
+		x = x/2
+		y = y/2
 	end
 
 	return Vector.new(x, y)
