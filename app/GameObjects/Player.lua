@@ -29,7 +29,7 @@ function Player:draw()
 end
 
 function Player:update(dt)
-	local a = Vector.new(love.graphics.getDimensions())
+	local a = Vector.new(love.graphics.getDimensions()) -- TODO: this is slightly bugged if player is not in screen center
 	local b = Vector.new(love.mouse.getPosition())
 	self.rot = (b - (a / 2)):angleTo()
 
