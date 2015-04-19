@@ -5,23 +5,25 @@ require("GameObjects.GridGO")
 require("GameObjects.Player")
 require("GameObjects.Level")
 require("GameObjects.Entity")
+require("GameObjects.TriggerZone")
 require("InputManager")
 
-local world = nil
+THE_WORLD = nil
+
 
 function love.load()
-	world = World:new()
-	world:init()
-	world:loadLevel("menu")
+	THE_WORLD = World:new()
+	THE_WORLD:init()
+	THE_WORLD:loadLevel("menu")
 
 	print("Setup complete...")
 end
 
 function love.update( dt )
 	InputManager:update(dt)
-	world:update(dt)
+	THE_WORLD:update(dt)
 end
 
 function love.draw()
-	world:draw()
+	THE_WORLD:draw()
 end
