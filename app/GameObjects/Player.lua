@@ -9,10 +9,10 @@ function Player:init()
 	GameObject.init(self)
 	self:setName("Player")
 	self.rot = 0
-	self.speed = 20000
+	self.speed = 100
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
-	self.collider = Collider:newCircle(10, true):setOwner(self)
+	self.collider = Collider:newCircle(12, true):setOwner(self)
 	self:setDrawLayer(100)
 	return self
 end
@@ -35,10 +35,11 @@ function Player:update(dt)
 	--self.collider.fixture:getBody():applyForce((InputManager.getMovement() * self.speed ):unpack())
 	self.collider.fixture:getBody():setLinearVelocity((InputManager.getMovement() * self.speed ):unpack())
 
-	if InputManager:didFire() then self:onClick() end
+	if InputManager:didFire() then self:onClick(1) end
+	if InputManager:didFire2() then self:onClick(2) end
 end
 
-function Player:onClick()
+function Player:onClick(mode)
 	local ray = {
 		type="ray",
 		start = self:getPosition(),
@@ -76,9 +77,15 @@ function Player:onClick()
 
 	if swap and swap:getTag("moveable") then
 		print(swap:getOwner():getName())
-		local newPos = swap:getOwner():getPosition()
-		swap:getOwner():setPosition(self:getPosition())
-		self:setPosition(newPos)
+
+		if mode == 1 then
+			local newPos = swap:getOwner():getPosition()
+			swap:getOwner():setPosition(self:getPosition())
+			self:setPosition(newPos)
+		elseif mode == 2 then
+			local dir = self:getPosition() - swap:getOwner():getPosition()
+			swap.fixture:getBody():applyLinearImpulse((dir*2000):unpack())
+		end
 	end
 end
 
