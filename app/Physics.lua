@@ -136,13 +136,15 @@ function Physics:collideCompoundAny(compound, other)
 	for i=1,#compound.childs do
 		local savePos = other.pos
 		other.pos = other.pos+compound.pos
-		local result = self:collide(other, compound.childs)
+		local result = self:collide(other, compound.childs[i])
 		other.pos = savePos
 		if result then return true end
 	end
 end
 
 function Physics:collide(a, b)
+	assert(self ~= nil)
+	assert(a.type ~= nil and b.type ~= nil)
 	if a.pos:dist2(b.pos) >= ((a.radius+b.radius)*(a.radius+b.radius)) then
 		return false
 	end

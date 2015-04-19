@@ -59,6 +59,7 @@ end
 
 function Collider:addChild(c)
 	assert(self.type == "compound")
+	assert(c.type ~= nil)
 	table.insert(self.childs, c)
 	self.radius = math.max(self.radius, c.pos:len()+c.radius)
 	return self
