@@ -8,20 +8,21 @@ Player = GameObject:new()
 function Player:init()
 	GameObject.init(self)
 	self.rot = 0
-	self.speed = 100
+	self.speed = 50
 	self.image = love.graphics.newImage("images/Player.png")
 	return self
 end
 
 function Player:onAddedToWorld()
 	GameObject.onAddedToWorld(self)
-	self.collider = Collider:newCircle(10)
+	self.collider = Collider:newCircle(20)
 	self:getWorld().physics:addCollider(self.collider)
 end
 
 function Player:draw()
 	love.graphics.push()
 	love.graphics.translate(self.pos:unpack())
+	love.graphics.circle("fill", 0, 0, 20, 10)
 	love.graphics.print("Pos: "..tostring(self.pos), 0, 0)
 	love.graphics.rotate(self.rot)
 	love.graphics.translate(-16,-16)
