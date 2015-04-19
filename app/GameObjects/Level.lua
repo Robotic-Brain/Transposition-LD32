@@ -8,6 +8,7 @@ Level._tiles = {}
 for i=1,8 do
 	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
 end
+Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
 
 function Level:init()
 	GameObject.init(self)
@@ -33,7 +34,7 @@ function Level:addBox( ... )
 		b = args[2]
 	end
 
-	self.collider:addChild(Collider:newAABox((b-a):unpack()):setPosition(a))
+	self.collider:addChild(Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2))
 end
 
 -- add collision line args: start/end point
@@ -78,8 +79,13 @@ function Level:buildBackground(w, h, ...)
 	love.graphics.setCanvas(c)
 	for j=0,h-1 do
 		for i=0,w-1 do
-			love.graphics.draw(Level._tiles[t[i+j*w + 1]], i*32, j*32)
-			--print(i, j, t[i+j*w + 1])
+			local tileId = t[i+j*w + 1]
+			if tileId > 0 and tileId <= #Level._tiles then
+				love.graphics.draw(Level._tiles[tileId], i*32, j*32)
+				if tileId >= Level._obstacleIndex then
+					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32)
+				end
+			end
 		end
 	end
 	love.graphics.setCanvas()
