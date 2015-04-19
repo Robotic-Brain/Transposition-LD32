@@ -1,6 +1,7 @@
 require("GameObjects.World")
 require("GameObjects.TestGO")
 require("GameObjects.Player")
+require("GameObjects.Level")
 require("InputManager")
 
 local world = nil
