@@ -30,7 +30,8 @@ return function (world)
 	world:addObject(l)
 
 	-- setup trigger zones
-	local z1 = TriggerZone:new():init(3*32, 1*32, function ()
+	local z1 = TriggerZone:new():init(3*32, 1*32, function (o)
+		if o:getUserData():getOwner() ~= p then return end
 		THE_WORLD = World:new()
 		THE_WORLD:init()
 		THE_WORLD:loadLevel("Playground")
