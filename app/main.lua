@@ -4,6 +4,7 @@ require("GameObjects.TestGO")
 require("GameObjects.GridGO")
 require("GameObjects.Player")
 require("GameObjects.Level")
+require("GameObjects.Entity")
 require("InputManager")
 
 local world = nil
