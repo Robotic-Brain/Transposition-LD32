@@ -12,6 +12,8 @@ function Player:init()
 	self.speed = 100
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
+	self.sounds = {}
+	self.sounds.teleport = love.audio.newSource("sounds/Teleport.wav")
 	self.collider = Collider:newCircle(12, true):setOwner(self)
 	self:setDrawLayer(100)
 	return self
@@ -82,6 +84,7 @@ function Player:onClick(mode)
 			local newPos = swap:getOwner():getPosition()
 			swap:getOwner():setPosition(self:getPosition())
 			self:setPosition(newPos)
+			self.sounds.teleport:play()
 		elseif mode == 2 then
 			local dir = self:getPosition() - swap:getOwner():getPosition()
 			swap.fixture:getBody():applyLinearImpulse((dir*2000):unpack())
