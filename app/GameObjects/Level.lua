@@ -4,23 +4,18 @@ Vector = require("hump.vector")
 
 Level = GameObject:new()
 
-Level._tiles = {}  -- this mapps a tileId to an immage
-Level._formatMap = {}  -- this mapps a character to a tileId
+Level._formatMap = {}  -- this mapps a character to a tileImage
+Level._tagMap = {}  -- this mapps a character to a field configuration
 Level._floorTiles = {"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","2","3"} -- contains floor tiles for random replacement
-for i=1,8 do
-	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
-	if i < 10 then
-		Level._formatMap[tostring(i)] = i
-	end
-end
-
-Level._formatMap["w"] = 8
-table.insert(Level._tiles, love.graphics.newImage("images/ladder.png"))
-Level._formatMap["l"] = #Level._tiles
-
-Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
-Level._solidIndex = 6	-- tiles below (excluding) this index are considered "transparent" for the teleport
-						-- if a collider gets created below this index, it gets the tag "pierceable"
+Level._formatMap["l"] = love.graphics.newImage("images/ladder.png"); Level._tagMap["l"] = "floor"
+Level._formatMap["1"] = love.graphics.newImage("images/tile01.png"); Level._tagMap["1"] = "floor"
+Level._formatMap["2"] = love.graphics.newImage("images/tile02.png"); Level._tagMap["2"] = "floor"
+Level._formatMap["3"] = love.graphics.newImage("images/tile03.png"); Level._tagMap["3"] = "floor"
+Level._formatMap["4"] = love.graphics.newImage("images/tile04.png"); Level._tagMap["4"] = "floor"
+Level._formatMap["s"] = love.graphics.newImage("images/tile05.png"); Level._tagMap["s"] = "pierceable"
+Level._formatMap["D"] = love.graphics.newImage("images/tile06.png"); Level._tagMap["D"] = "solid"
+Level._formatMap["d"] = love.graphics.newImage("images/tile07.png"); Level._tagMap["d"] = "solid"
+Level._formatMap["w"] = love.graphics.newImage("images/tile08.png"); Level._tagMap["w"] = "solid"
 
 function Level:init()
 	GameObject.init(self)
@@ -89,6 +84,8 @@ function Level:addLineStrip( ... )
 	return col
 end
 
+-- unknown chars are ignored
+-- for mapping see on top of this file
 function Level:buildBackgroundFromText(w, h, s)
 	assert(w > 0)
 	assert(h > 0)
@@ -100,14 +97,11 @@ function Level:buildBackgroundFromText(w, h, s)
 	love.graphics.setCanvas(c)
 	while y <= h-1 and x <= w-1 and i < string.len(s) do
 		local char = string.sub(s, i, i)
-		local tileId = Level._formatMap[char] or -1
-		if tileId > 0 and tileId <= #Level._tiles then
-			print(x, y, tileId)
-			love.graphics.draw(Level._tiles[tileId], x*32, y*32)
-			if tileId >= Level._obstacleIndex then
-				local tag = "solid"
-				if tileId < Level._solidIndex then tag = "pierceable" end
-				self:addBox(x*32, y*32, (x+1)*32, (y+1)*32):setTag(tag)
+		local tileImg = Level._formatMap[char] or false
+		if tileImg then
+			love.graphics.draw(tileImg, x*32, y*32)
+			if Level._tagMap[char] ~= "floor" then
+				self:addBox(x*32, y*32, (x+1)*32, (y+1)*32):setTag(Level._tagMap[char])
 			end
 			x = x + 1
 			if x == w then
@@ -118,31 +112,6 @@ function Level:buildBackgroundFromText(w, h, s)
 			print("unknown char: "..char)
 		end
 		i = i + 1
-	end
-	love.graphics.setCanvas()
-	self:setDrawable(c)
-end
-
--- width, height, list of tiles (tttttt \n ttttttt)
--- map bounds are added automatically
-function Level:buildBackground(w, h, ...)
-	local t = {...}
-	assert(#t == w*h)
-
-	local c = love.graphics.newCanvas(w*32, h*32)
-	love.graphics.setCanvas(c)
-	for j=0,h-1 do
-		for i=0,w-1 do
-			local tileId = t[i+j*w + 1]
-			if tileId > 0 and tileId <= #Level._tiles then
-				love.graphics.draw(Level._tiles[tileId], i*32, j*32)
-				if tileId >= Level._obstacleIndex then
-					local tag = "solid"
-					if tileId < Level._solidIndex then tag = "pierceable" end
-					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32):setTag(tag)
-				end
-			end
-		end
 	end
 	love.graphics.setCanvas()
 	self:setDrawable(c)
