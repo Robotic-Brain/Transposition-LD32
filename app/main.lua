@@ -1,6 +1,7 @@
 require("GameObjects.World")
 require("GameObjects.TestGO")
 require("GameObjects.Player")
+require("InputManager")
 
 local world = nil
 
@@ -13,6 +14,7 @@ function love.load()
 end
 
 function love.update( dt )
+	InputManager:update(dt)
 	world:update(dt)
 end
 

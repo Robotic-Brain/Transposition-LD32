@@ -25,7 +25,10 @@ end
 function Physics:checkCollisions()
 	for i=1,#self.icolliders do
 		for j=i+1,#self.icolliders do
-			self:collide(self.icolliders[i], self.icolliders[j])
+			if self:collide(self.icolliders[i], self.icolliders[j]) then
+				self.icolliders[i]:onCollision(self.icolliders[j])
+				self.icolliders[j]:onCollision(self.icolliders[i])
+			end
 		end
 	end
 end
@@ -42,8 +45,6 @@ function Physics:collide(a, b)
 		return false
 	end
 	if a.type == "circle" and b.type == "circle" then
-		a:onCollision(b)
-		b:onCollision(a)
 		return true
 	elseif (a.type == "aabox" and b.type == "circle")
 		or (a.type == "circle" and b.type == "aabox") then
@@ -52,8 +53,6 @@ function Physics:collide(a, b)
 		-- from http://stackoverflow.com/a/1879223
 		local closest = clamp(circle.pos, box.pos-(box.dim/2), box.pos+(box.dim/2))
 		if circle.pos:dist2(closest) < (circle.radius*circle.radius) then
-			a:onCollision(b)
-			b:onCollision(a)
 			return true
 		end
 	elseif (a.type == "line" and b.type == "circle")
@@ -74,19 +73,31 @@ function Physics:collide(a, b)
 			local t1 = (-cb - discriminant)/(2*ca)
 			local t2 = (-cb + discriminant)/(2*ca)
 			if t1 >= 0 and t1 <= 1 then
-				a:onCollision(b)
-				b:onCollision(a)
 				return true
 			end
 			if t2 >= 0 and t2 <= 1 then
-				a:onCollision(b)
-				b:onCollision(a)
 				return true
 			end
 		end
 	end
 
 	return false
+end
+
+function Physics:rayCast(ray)
+	assert(ray.type == "line")
+	local objs = {}
+	for i=1,#self.icolliders do
+		if self:collide(self.icolliders[i], ray) then
+			table.insert(objs, self.icolliders[i])
+		end
+	end
+
+	table.sort( objs, function (a, b)
+		return (ray.pos-a.pos) > (ray.pos-b.pos)
+	end )
+
+	return objs
 end
 
 function Physics:addCollider(c)
