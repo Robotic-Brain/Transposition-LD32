@@ -10,7 +10,7 @@ local world = nil
 function love.load()
 	world = World:new()
 	world:init()
-	world:loadLevel("main")
+	world:loadLevel("menu")
 
 	print("Setup complete...")
 end
