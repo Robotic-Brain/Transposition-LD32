@@ -4,10 +4,15 @@ Vector = require("hump.vector")
 
 Level = GameObject:new()
 
-Level._tiles = {}
+Level._tiles = {}  -- this mapps a tileId to an immage
+Level._formatMap = {}  -- this mapps a character to a tileId
 for i=1,8 do
 	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
+	if i < 10 then
+		Level._formatMap[tostring(i)] = i
+	end
 end
+
 Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
 Level._solidIndex = 6	-- tiles below (excluding) this index are considered "transparent" for the teleport
 						-- if a collider gets created below this index, it gets the tag "pierceable"
@@ -77,6 +82,40 @@ function Level:addLineStrip( ... )
 		prv = nxt
 	end
 	return col
+end
+
+function Level:buildBackgroundFromText(w, h, s)
+	assert(w > 0)
+	assert(h > 0)
+	print("Load Level from string")
+	local x = 0
+	local y = 0
+	local i = 0
+	local c = love.graphics.newCanvas(w*32, h*32)
+	love.graphics.setCanvas(c)
+	while y <= h-1 and x <= w-1 and i < string.len(s) do
+		local char = string.sub(s, i, i)
+		local tileId = Level._formatMap[char] or -1
+		if tileId > 0 and tileId <= #Level._tiles then
+			print(x, y, tileId)
+			love.graphics.draw(Level._tiles[tileId], x*32, y*32)
+			if tileId >= Level._obstacleIndex then
+				local tag = "solid"
+				if tileId < Level._solidIndex then tag = "pierceable" end
+				self:addBox(x*32, y*32, (x+1)*32, (y+1)*32):setTag(tag)
+			end
+			x = x + 1
+			if x == w then
+				x = 0
+				y = y + 1
+			end
+		else
+			print("unknown char: "..char)
+		end
+		i = i + 1
+	end
+	love.graphics.setCanvas()
+	self:setDrawable(c)
 end
 
 -- width, height, list of tiles (tttttt \n ttttttt)
