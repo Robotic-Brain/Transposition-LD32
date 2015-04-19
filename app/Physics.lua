@@ -82,7 +82,10 @@ end
 function Physics:collideBoxBox(a, b)
 	assert(a.type == "aabox")
 	assert(b.type == "aabox")
-	print("Box/Box colission not implemented!")
+	if not notifyOnceBoxBox then
+		print("Box/Box colission not implemented!", a:getOwner():getName(), b:getOwner():getName())
+		notifyOnceBoxBox = true
+	end
 end
 
 function Physics:collideLineBox(line, box)

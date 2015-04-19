@@ -34,7 +34,7 @@ function Level:addBox( ... )
 		b = args[2]
 	end
 
-	self.collider:addChild(Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2))
+	self.collider:addChild(Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2):setOwner(self))
 end
 
 -- add collision line args: start/end point
@@ -52,7 +52,7 @@ function Level:addLine( ... )
 	end
 	print("addingLine: ", a, b)
 
-	self.collider:addChild(Collider:newLine(a,b))
+	self.collider:addChild(Collider:newLine(a,b):setOwner(self))
 end
 
 -- add collision line args: start/end point
@@ -64,7 +64,7 @@ function Level:addLineStrip( ... )
 	for i=3,#args,2 do
 		local nxt = Vector.new(args[i], args[i+1])
 		print("addingLine: ", prv, nxt)
-		self.collider:addChild(Collider:newLine(prv, nxt))
+		self.collider:addChild(Collider:newLine(prv, nxt):setOwner(self))
 		prv = nxt
 	end
 end

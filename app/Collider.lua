@@ -76,6 +76,7 @@ function Collider:setOwner(owner)
 end
 
 function Collider:getOwner()
+	assert(self.owner)
 	return self.owner
 end
 
