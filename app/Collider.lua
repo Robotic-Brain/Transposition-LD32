@@ -102,9 +102,9 @@ function Collider:onCollision(other)
 end
 
 function Collider:onAdded()
-	print("Collider onAdded: "..tostring(self.type))
+	print("Collider onAdded: "..tostring(self).."->"..tostring(self:getOwner():getName()))
 end
 
 function Collider:onRemoved()
-	print("Collider onRemoved: "..tostring(self.type))
+	print("Collider onRemoved: "..tostring(self))
 end

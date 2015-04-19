@@ -19,6 +19,10 @@ function GameObject:init()
 	return self
 end
 
+function GameObject:__tostring()
+	return tostring(self.getName())
+end
+
 -- public: physics update
 function GameObject:update(dt)
 	-- body
@@ -80,7 +84,7 @@ function GameObject:setWorld(world)
 end
 
 function GameObject:onAddedToWorld()
-	print("OnWorldAdded: "..tostring(self))
+	print("OnWorldAdded: "..self:getName())
 	if self.collider then
 		self:getWorld().physics:addCollider(self.collider)
 	end

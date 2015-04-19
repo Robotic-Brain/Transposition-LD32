@@ -6,8 +6,7 @@ return function (world)
 
 	-- setup level
 	local l = Level:new():init()
-	world:addObject(l)
-
+	
 	l:buildBackground(10, 7,
 		8,8,8,8,8,8,8,8,8,8,
 		8,1,1,1,8,1,1,1,4,8,
@@ -17,6 +16,7 @@ return function (world)
 		8,1,1,1,8,1,1,1,1,8,
 		8,8,8,8,8,8,8,8,8,8
 		)
+	world:addObject(l)
 
 	-- setup objects
 	world:addObject(Entity:new():init("crate"):setPosition(Vector.new(64+16, 64+16)))

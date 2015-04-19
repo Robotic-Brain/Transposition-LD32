@@ -15,7 +15,7 @@ Level._solidIndex = 6	-- tiles below (excluding) this index are considered "tran
 function Level:init()
 	GameObject.init(self)
 	self:setName("Level")
-	self.collider = Collider:newCompound():setOwner(self)
+	self.colliders = {}
 	return self
 end
 
@@ -30,13 +30,13 @@ function Level:addBox( ... )
 	if #args == 4 then
 		a = Vector.new(args[1], args[2])
 		b = Vector.new(args[3], args[4])
-		print("addingBox: ", a, b)
 	else
 		a = args[1]
 		b = args[2]
 	end
+	print("addingBox: ", a, b)
 
-	self.collider:addChild(Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2):setOwner(self))
+	table.insert(self.colliders, Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2):setOwner(self))
 end
 
 -- add collision line args: start/end point
@@ -54,7 +54,7 @@ function Level:addLine( ... )
 	end
 	print("addingLine: ", a, b)
 
-	self.collider:addChild(Collider:newLine(a,b):setOwner(self))
+	table.insert(self.colliders, Collider:newLine(a,b):setOwner(self))
 end
 
 -- add collision line args: start/end point
@@ -66,7 +66,7 @@ function Level:addLineStrip( ... )
 	for i=3,#args,2 do
 		local nxt = Vector.new(args[i], args[i+1])
 		print("addingLine: ", prv, nxt)
-		self.collider:addChild(Collider:newLine(prv, nxt):setOwner(self))
+		table.insert(self.colliders, Collider:newLine(prv, nxt):setOwner(self))
 		prv = nxt
 	end
 end
@@ -92,6 +92,15 @@ function Level:buildBackground(w, h, ...)
 	end
 	love.graphics.setCanvas()
 	self:setDrawable(c)
+end
+
+function Level:onAddedToWorld()
+	GameObject.onAddedToWorld(self)
+	if self.colliders then
+		for i=1,#self.colliders do
+			self:getWorld().physics:addCollider(self.colliders[i])
+		end
+	end
 end
 
 function Level:setDrawable(d)
