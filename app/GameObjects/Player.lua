@@ -50,3 +50,7 @@ function Player:onClick()
 		self:setPosition(newPos)
 	end
 end
+
+function Player:onCollision(this, other)
+	print(tostring(this.pos).." collided with "..tostring(other.pos))
+end

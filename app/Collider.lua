@@ -79,7 +79,9 @@ function Collider:getOwner()
 end
 
 function Collider:onCollision(other)
-	print(tostring(self.pos).." collided with "..tostring(other.pos))
+	if self:getOwner() and type(self:getOwner().onCollision) == "function" then
+		self:getOwner():onCollision(self, other)
+	end
 end
 
 function Collider:onAdded()
