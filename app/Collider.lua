@@ -13,12 +13,16 @@ function Collider:new(o)
 end
 
 function Collider:__tostring()
+	local str = " Tags:"
+	for k,v in pairs(self.tags) do
+		str = str.." "..tostring(k).."="..tostring(v)..";"
+	end
 	if self.type == "circle" then
-		return "Circle: r="..self.radius.." pos="..tostring(self.pos)
+		return "Circle: r="..self.radius.." pos="..tostring(self.pos)..str
 	elseif self.type == "aabox" then
-		return "AABox: r="..self.radius.." pos="..tostring(self.pos).." dim="..tostring(self.dim)
+		return "AABox: r="..self.radius.." pos="..tostring(self.pos).." dim="..tostring(self.dim)..str
 	elseif self.type == "line" then
-		return "Line: r="..self.radius.." pos="..tostring(self.pos).." extend="..tostring(self.extend)
+		return "Line: r="..self.radius.." pos="..tostring(self.pos).." extend="..tostring(self.extend)..str
 	else
 		return "Unknown: r="..self.radius.." pos="..tostring(self.pos)
 	end

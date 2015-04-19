@@ -36,7 +36,9 @@ function Level:addBox( ... )
 	end
 	print("addingBox: ", a, b)
 
-	table.insert(self.colliders, Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2):setOwner(self))
+	local col = Collider:newAABox((b-a):unpack()):setPosition(a+(b-a)/2):setOwner(self)
+	table.insert(self.colliders, col)
+	return col
 end
 
 -- add collision line args: start/end point
@@ -54,7 +56,9 @@ function Level:addLine( ... )
 	end
 	print("addingLine: ", a, b)
 
-	table.insert(self.colliders, Collider:newLine(a,b):setOwner(self))
+	local col = Collider:newLine(a,b):setOwner(self)
+	table.insert(self.colliders, col)
+	return col
 end
 
 -- add collision line args: start/end point
@@ -63,12 +67,16 @@ function Level:addLineStrip( ... )
 	assert(#args >= 4)
 	assert(#args%2 == 0)
 	local prv = Vector.new(args[1], args[2])
+	local col = {}
 	for i=3,#args,2 do
 		local nxt = Vector.new(args[i], args[i+1])
 		print("addingLine: ", prv, nxt)
-		table.insert(self.colliders, Collider:newLine(prv, nxt):setOwner(self))
+		local col1 = Collider:newLine(prv, nxt):setOwner(self)
+		table.insert(self.colliders, col1)
+		table.insert(col, col1)
 		prv = nxt
 	end
+	return col
 end
 
 -- width, height, list of tiles (tttttt \n ttttttt)
@@ -85,7 +93,7 @@ function Level:buildBackground(w, h, ...)
 			if tileId > 0 and tileId <= #Level._tiles then
 				love.graphics.draw(Level._tiles[tileId], i*32, j*32)
 				if tileId >= Level._obstacleIndex then
-					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32)
+					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32):setTag("solid")
 				end
 			end
 		end
