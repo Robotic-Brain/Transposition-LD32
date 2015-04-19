@@ -93,7 +93,9 @@ function Level:buildBackground(w, h, ...)
 			if tileId > 0 and tileId <= #Level._tiles then
 				love.graphics.draw(Level._tiles[tileId], i*32, j*32)
 				if tileId >= Level._obstacleIndex then
-					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32):setTag("solid")
+					local tag = "solid"
+					if tileId < Level._solidIndex then tag = "pierceable" end
+					self:addBox(i*32, j*32, (i+1)*32, (j+1)*32):setTag(tag)
 				end
 			end
 		end

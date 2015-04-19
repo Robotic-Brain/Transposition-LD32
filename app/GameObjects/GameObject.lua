@@ -56,18 +56,24 @@ function GameObject:setPosition(vec)
 	assert(Vector.isvector(vec))
 	self.pos = vec
 	if self.collider then
-		self.collider:setPosition(self:getPosition())
+		self.collider:setPosition(vec)
 	end
 	return self
 end
 
 function GameObject:getPosition()
-	return self.pos
+	if self.collider then
+		return self.collider:getPosition()
+	else
+		return self.pos
+	end
 end
 
 function GameObject:move(vec)
+	assert(false)
 	assert(Vector.isvector(vec))
-	self:setPosition(self:getPosition() + vec)
+	self.collider.fixture:getBody():applyForce(vec:unpack())
+	--self:setPosition(self:getPosition() + vec)
 end
 
 -- public: removes object from world and destroys it

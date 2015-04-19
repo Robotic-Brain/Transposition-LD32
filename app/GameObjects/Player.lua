@@ -9,11 +9,10 @@ function Player:init()
 	GameObject.init(self)
 	self:setName("Player")
 	self.rot = 0
-	self.speed = 200
+	self.speed = 20000
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
-	self.lastPos = self:getPosition()
-	self.collider = Collider:newCircle(10):setOwner(self)
+	self.collider = Collider:newCircle(10, true):setOwner(self)
 	self:setDrawLayer(100)
 	return self
 end
@@ -28,38 +27,54 @@ function Player:draw()
 end
 
 function Player:update(dt)
-	self.lastPos = self:getPosition()
 	local a = Vector.new(love.graphics.getDimensions())
 	local b = Vector.new(love.mouse.getPosition())
 	self.rot = (b - (a / 2)):angleTo()
 
-	self:move(InputManager.getMovement() * self.speed * dt)
+	--self:move(InputManager.getMovement() * self.speed * dt)
+	--self.collider.fixture:getBody():applyForce((InputManager.getMovement() * self.speed ):unpack())
+	self.collider.fixture:getBody():setLinearVelocity((InputManager.getMovement() * self.speed ):unpack())
 
 	if InputManager:didFire() then self:onClick() end
 end
 
 function Player:onClick()
-	local ray = Collider:newLine(self:getPosition(), self:getPosition()+Vector.new(self.range, 0):rotated(self.rot))
+	local ray = {
+		type="ray",
+		start = self:getPosition(),
+		pend = self:getPosition()+Vector.new(self.range, 0):rotated(self.rot)
+	}
 	local matches = self:getWorld().physics:rayCast(ray)
 	--if matches[1] == self.collider then table.remove(matches, 1) end
 	local swap = false
 	for i=1,#matches do
-		print("Match", matches[i].type)
-		if matches[i] ~= self.collider then
-			if matches[i]:getTag("moveable") then
+		local curMatch = matches[i].fix
+		print("Match",
+				curMatch:getOwner():getName(),
+				curMatch:getTag("moveable"),
+				curMatch:getTag("pierceable"),
+				curMatch:getTag("solid")
+			)
+		if curMatch ~= self.collider then
+			if curMatch:getTag("pierceable") then
+				-- ignore
+			else
+				swap = curMatch
+			end
+			--[[if curMatch:getTag("moveable") then
 				-- hit moveable object
-				swap = matches[i]
+				swap = curMatch
 				break
-			elseif matches[i]:getTag("pierceable") then
+			elseif curMatch:getTag("pierceable") then
 				-- ignore
 			else
 				-- hit wall
-				-- break
-			end
+				break
+			end]]
 		end
 	end
 
-	if swap then
+	if swap and swap:getTag("moveable") then
 		print(swap:getOwner():getName())
 		local newPos = swap:getOwner():getPosition()
 		swap:getOwner():setPosition(self:getPosition())
@@ -68,6 +83,7 @@ function Player:onClick()
 end
 
 function Player:onCollision(this, other)
+	print("onCollision Player")
 	if not love.keyboard.isDown("n") then
 		self:setPosition(self.lastPos)
 	end

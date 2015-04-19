@@ -1,14 +1,14 @@
 Vector = require("hump.vector")
+require("Physics")
 
 Collider = {}
 
 -- public: create new game object
 function Collider:new(o)
-	o = o or {type="none", radius=0}
+	o = o or {}
 	setmetatable(o, self)
 	self.__index = self
 	o.tags = {}
-	o:setPosition(Vector.new())
 	return o
 end
 
@@ -29,30 +29,47 @@ function Collider:__tostring()
 end
 
 -- public: new circle collider with radius
-function Collider:newCircle(r)
-	return self:new{type="circle", radius=r}
-end
-
--- public: new line collider with start/end
-function Collider:newLine(s, e)
+function Collider:newCircle(r, dynHint)
 	local o = self:new{
-		type="line",
-		extend=e-s,
-		radius=(e-s):len()
+		fixture=love.physics.newFixture(
+			love.physics.newBody(Physics._theWorld,0,0, dynHint and "dynamic" or "static"),
+			love.physics.newCircleShape(r), 1)
 	}
-	o:setPosition(s)
+	o.fixture:setUserData(o)
+	o.fixture:setRestitution(0)
+	local c, m, g = o.fixture:getFilterData()
+	o.mask = m
+	o.fixture:setFilterData(c, 0, g)
 	return o
 end
 
+--[[ public: new line collider with start/end
+function Collider:newLine(s, e)
+	local o = self:new{
+		fixture=love.physics.newFixture(
+			love.physics.newBody(Physics._theWorld,0,0, "dynamic"),
+			love.physics.newCircleShape(r), 1)
+	}
+	o:setPosition(s)
+	return o
+end]]
+
 -- public: new Axis aligned Box collider with width/height
-function Collider:newAABox(w, h)
-	return self:new{
-		type="aabox",
-		dim=Vector.new(w,h),
-		radius=Vector.new(w,h):len()}
+function Collider:newAABox(w, h, dynHint)
+	local o = self:new{
+		fixture=love.physics.newFixture(
+			love.physics.newBody(Physics._theWorld,0,0, dynHint and "dynamic" or "static"),
+			love.physics.newRectangleShape(w, h), 1)
+	}
+	o.fixture:setUserData(o)
+	o.fixture:setRestitution(0)
+	local c, m, g = o.fixture:getFilterData()
+	o.mask = m
+	o.fixture:setFilterData(c, 0, g)
+	return o
 end
 
--- public: new Compound collider
+--[[ public: new Compound collider
 function Collider:newCompound()
 	local o = self:new{
 		type="compound",
@@ -60,19 +77,23 @@ function Collider:newCompound()
 		radius=0
 	}
  	return o
-end
+end]]
 
-function Collider:addChild(c)
+--[[function Collider:addChild(c)
 	assert(self.type == "compound")
 	assert(c.type ~= nil)
 	table.insert(self.childs, c)
 	self.radius = math.max(self.radius, c.pos:len()+c.radius)
 	return self
-end
+end]]
 
 function Collider:setPosition(p)
-	self.pos = p
+	self.fixture:getBody():setPosition(p:unpack())
 	return self
+end
+
+function Collider:getPosition()
+	return Vector.new(self.fixture:getBody():getPosition())
 end
 
 function Collider:setOwner(owner)
