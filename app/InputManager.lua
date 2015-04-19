@@ -31,6 +31,10 @@ function InputManager:didFire()
 	return self.fireState
 end
 
+function InputManager:didFire2()
+	return love.mouse.isDown("r")
+end
+
 function InputManager:update(dt)
 	if love.mouse.isDown("l") and not self.lastMouseState then
 		self.fireState = true
