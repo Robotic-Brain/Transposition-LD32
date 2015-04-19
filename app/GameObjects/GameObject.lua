@@ -68,6 +68,9 @@ end
 
 function GameObject:onAddedToWorld()
 	print("OnWorldAdded: "..tostring(self))
+	if self.collider then
+		self:getWorld().physics:addCollider(self.collider)
+	end
 end
 
 function GameObject:getWorld()

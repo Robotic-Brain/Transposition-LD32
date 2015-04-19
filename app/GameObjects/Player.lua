@@ -12,13 +12,9 @@ function Player:init()
 	self.speed = 50
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
-	return self
-end
-
-function Player:onAddedToWorld()
-	GameObject.onAddedToWorld(self)
+	self.lastPos = self:getPosition()
 	self.collider = Collider:newCircle(10):setOwner(self)
-	self:getWorld().physics:addCollider(self.collider)
+	return self
 end
 
 function Player:draw()
@@ -31,6 +27,7 @@ function Player:draw()
 end
 
 function Player:update(dt)
+	self.lastPos = self:getPosition()
 	local a = Vector.new(love.graphics.getDimensions())
 	local b = Vector.new(love.mouse.getPosition())
 	self.rot = (b - (a / 2)):angleTo()
@@ -52,5 +49,7 @@ function Player:onClick()
 end
 
 function Player:onCollision(this, other)
-	print(tostring(this.pos).." collided with "..tostring(other.pos))
+	if not love.keyboard.isDown("n") then
+		self:setPosition(self.lastPos)
+	end
 end
