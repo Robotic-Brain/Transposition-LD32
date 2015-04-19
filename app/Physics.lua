@@ -1,5 +1,5 @@
 Vector = require("hump.vector")
-love.physics.setMeter(1)
+love.physics.setMeter(32)
 
 Physics = {}
 Physics._theWorld = nil

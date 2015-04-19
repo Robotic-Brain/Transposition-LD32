@@ -9,7 +9,7 @@ function Player:init()
 	GameObject.init(self)
 	self:setName("Player")
 	self.rot = 0
-	self.speed = 100
+	self.speed = 250
 	self.range = 300
 	self.image = love.graphics.newImage("images/Player.png")
 	self.sounds = {}
@@ -79,7 +79,7 @@ function Player:onClick(mode)
 			self.sounds.teleport:play()
 		elseif mode == 2 then
 			local dir = self:getPosition() - swap:getOwner():getPosition()
-			swap.fixture:getBody():applyLinearImpulse((dir*2000):unpack())
+			swap.fixture:getBody():applyLinearImpulse((dir*0.3):unpack())
 		end
 	end
 end
