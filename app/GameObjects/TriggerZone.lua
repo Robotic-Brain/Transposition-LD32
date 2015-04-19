@@ -6,10 +6,10 @@ function TriggerZone:init(width, height, fnc, onPhase)
 	GameObject.init(self)
 	onPhase = onPhase or "beginContact"
 	self:setName("TriggerZone")
-	self.drawable = love.graphics.newCanvas(width, height)
+	--self.drawable = love.graphics.newCanvas(width, height)
 	self.collider = Collider:newAABox(width, height):setOwner(self):setTag("pierceable")
 	self.collider.fixture:setSensor(true)
-	self:setDrawLayer(10)
+	--self:setDrawLayer(10)
 	self.func = fnc
 	self.dim = Vector.new(width, height)
 
@@ -21,9 +21,9 @@ function TriggerZone:init(width, height, fnc, onPhase)
 		end
 	end
 
-	love.graphics.setCanvas(self.drawable)
+	--[[love.graphics.setCanvas(self.drawable)
 	self.drawable:clear(255,0,0, 255)
-	love.graphics.setCanvas()
+	love.graphics.setCanvas() --]]
 	return self
 end
 
@@ -33,10 +33,10 @@ end
 
 --[[function TriggerZone:draw()
 	love.graphics.push()
-	--love.graphics.polygon("fill", self.collider.fixture:getBody():getWorldPoints(self.collider.fixture:getShape():getPoints()))
+	love.graphics.polygon("fill", self.collider.fixture:getBody():getWorldPoints(self.collider.fixture:getShape():getPoints()))
 	love.graphics.translate(self:getPosition():unpack())
 	love.graphics.translate((-self.dim/2):unpack())
-	love.graphics.draw(self.drawable)
+	--love.graphics.draw(self.drawable)
 	love.graphics.pop()
 end --]]
 

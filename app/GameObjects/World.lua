@@ -16,8 +16,15 @@ function World:loadLevel( name )
 	package.loaded["levels."..name] = nil
 	love.window.setTitle("Level name: "..name)
 	World._sounds.enterLevel:play()
+	self.activeLevel = name
 
 end --]]
+
+function World:resetLevel()
+	if self.activeLevel then
+		self:loadLevel(self.activeLevel)
+	end
+end
 
 function World:init()
 	GameObject.init(self)

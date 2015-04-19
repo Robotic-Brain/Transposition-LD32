@@ -16,6 +16,11 @@ Level._formatMap["s"] = love.graphics.newImage("images/tile05.png"); Level._tagM
 Level._formatMap["D"] = love.graphics.newImage("images/tile06.png"); Level._tagMap["D"] = "solid"
 Level._formatMap["d"] = love.graphics.newImage("images/tile07.png"); Level._tagMap["d"] = "solid"
 Level._formatMap["w"] = love.graphics.newImage("images/tile08.png"); Level._tagMap["w"] = "solid"
+Level._formatMap["k"] = love.graphics.newImage("images/lava.png"); Level._tagMap["k"] = "kill"
+Level._formatMap["p"] = love.graphics.newImage("images/lavaPit.png"); Level._tagMap["p"] = "kill"
+
+Level._sounds = {}
+Level._sounds.bluntDeath = love.audio.newSource("sounds/BluntDeath.wav")
 
 function Level:init()
 	GameObject.init(self)
@@ -111,7 +116,13 @@ function Level:buildBackgroundFromText(w, h, s)
 		local tileImg = Level._formatMap[char] or false
 		if tileImg then
 			love.graphics.draw(tileImg, x*32, y*32)
-			if Level._tagMap[char] ~= "floor" then
+			if Level._tagMap[char] == "kill" then
+				local tz = TriggerZone:new():init(32, 32, function (o)
+					o:getUserData():getOwner():die()
+					Level._sounds.bluntDeath:play()
+				end):setPosition(Vector.new(x*32+16, y*32+16))
+				THE_WORLD:addObject(tz)
+			elseif Level._tagMap[char] ~= "floor" then
 				self:addBox(x*32, y*32, (x+1)*32, (y+1)*32):setTag(Level._tagMap[char])
 			end
 			x = x + 1

@@ -83,6 +83,11 @@ function GameObject:destroy()
 	end
 end
 
+-- alias for destroy but with effects
+function GameObject:die()
+	self:destroy()
+end
+
 -- protected: Should only be called by World
 function GameObject:setWorld(world)
 	if world then

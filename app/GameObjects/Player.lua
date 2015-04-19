@@ -19,6 +19,15 @@ function Player:init()
 	return self
 end
 
+function Player:die()
+	local w = self:getWorld()
+
+	w.timer.add(2, function ()
+		w:resetLevel()
+	end)
+	GameObject.die(self)
+end
+
 function Player:draw()
 	love.graphics.push()
 	love.graphics.translate(self:getPosition():unpack())
