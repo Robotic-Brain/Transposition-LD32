@@ -7,6 +7,7 @@ Player = GameObject:new()
 
 function Player:init()
 	GameObject.init(self)
+	self:setName("Player")
 	self.rot = 0
 	self.speed = 50
 	self.range = 300
@@ -16,7 +17,7 @@ end
 
 function Player:onAddedToWorld()
 	GameObject.onAddedToWorld(self)
-	self.collider = Collider:newCircle(20)
+	self.collider = Collider:newCircle(20):setOwner(self)
 	self:getWorld().physics:addCollider(self.collider)
 end
 
@@ -48,4 +49,7 @@ function Player:onClick()
 	local matches = self:getWorld().physics:rayCast(ray)
 	if matches[1] == self.collider then table.remove(matches, 1) end
 	print(#matches)
+	for i=1,#matches do
+		print(matches[i]:getOwner():getName())
+	end
 end

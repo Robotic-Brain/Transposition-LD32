@@ -19,7 +19,7 @@ function TestGO:onAddedToWorld()
 	--self.collider = Collider:newAABox(20, 20)
 	--self.collider = Collider:newLine(Vector.new(-10, -10), Vector.new(10, 10))
 	--self.collider = Collider:newLine(Vector.new(-15, -10), Vector.new(100, 100))
-	self.collider = Collider:newCircle(10)
+	self.collider = Collider:newCircle(10):setOwner(self)
 	self:getWorld().physics:addCollider(self.collider)
 
 	--self:setPosition(Vector.new(10, 30))

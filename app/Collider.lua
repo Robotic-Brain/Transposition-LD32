@@ -49,6 +49,16 @@ end
 
 function Collider:setPosition(p)
 	self.pos = p
+	return self
+end
+
+function Collider:setOwner(owner)
+	self.owner = owner
+	return self
+end
+
+function Collider:getOwner()
+	return self.owner
 end
 
 function Collider:onCollision(other)
