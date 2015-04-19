@@ -28,7 +28,8 @@ function Collider:newCircle(r, dynHint)
 			love.physics.newCircleShape(r), 1)
 	}
 	o.fixture:setUserData(o)
-	o.fixture:setRestitution(0)
+	--o.fixture:setRestitution(0)
+	o.fixture:getBody():setLinearDamping(10)
 	local c, m, g = o.fixture:getFilterData()
 	o.mask = m
 	o.fixture:setFilterData(c, 0, g)
@@ -54,7 +55,8 @@ function Collider:newAABox(w, h, dynHint)
 			love.physics.newRectangleShape(w, h), 1)
 	}
 	o.fixture:setUserData(o)
-	o.fixture:setRestitution(0)
+	--o.fixture:setRestitution(0)
+	o.fixture:getBody():setLinearDamping(10)
 	local c, m, g = o.fixture:getFilterData()
 	o.mask = m
 	o.fixture:setFilterData(c, 0, g)

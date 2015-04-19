@@ -18,7 +18,7 @@ end
 
 function Entity:initCrate()
 	assert(self.entityType == "crate")
-	self.collider = Collider:newAABox(25, 25):setOwner(self):setTag("moveable")
+	self.collider = Collider:newAABox(25, 25, true):setOwner(self):setTag("moveable")
 	self.image = Entity._images["crate"]
 end
 
