@@ -27,4 +27,12 @@ return function (world)
 	love.graphics.setLineWidth(lw)
 	love.graphics.setColor(r,g,b,a)
 	l:setDrawable(c)
+
+	l:buildBackground(10, 5,
+		1,2,3,4,5,6,7,1,1,1,
+		1,1,5,1,1,1,1,1,1,1,
+		1,1,1,1,1,7,1,1,1,1,
+		1,1,1,1,1,8,1,1,1,1,
+		1,1,1,1,1,8,1,1,1,1
+		)
 end

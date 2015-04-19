@@ -4,6 +4,11 @@ Vector = require("hump.vector")
 
 Level = GameObject:new()
 
+Level._tiles = {}
+for i=1,8 do
+	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
+end
+
 function Level:init()
 	GameObject.init(self)
 	self:setName("Level")
@@ -61,6 +66,24 @@ function Level:addLineStrip( ... )
 		self.collider:addChild(Collider:newLine(prv, nxt))
 		prv = nxt
 	end
+end
+
+-- width, height, list of tiles (tttttt \n ttttttt)
+-- map bounds are added automatically
+function Level:buildBackground(w, h, ...)
+	local t = {...}
+	assert(#t == w*h)
+
+	local c = love.graphics.newCanvas(w*32, h*32)
+	love.graphics.setCanvas(c)
+	for j=0,h-1 do
+		for i=0,w-1 do
+			love.graphics.draw(Level._tiles[t[i+j*w + 1]], i*32, j*32)
+			--print(i, j, t[i+j*w + 1])
+		end
+	end
+	love.graphics.setCanvas()
+	self:setDrawable(c)
 end
 
 function Level:setDrawable(d)
