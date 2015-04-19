@@ -12,6 +12,7 @@ function World:loadLevel( name )
 	print("Loading level: "..name)
 	require("levels."..name)(self)
 	package.loaded["levels."..name] = nil
+	love.window.setTitle(name)
 end --]]
 
 function World:init()
