@@ -39,6 +39,56 @@ function clamp(v, min, max)
 		math.min(math.max(min.y, v.y), max.y)
 		)
 end
+function collideBoxCircle(box, circle)
+	assert(box.type == "aabox")
+	assert(circle.type == "circle")
+	-- from http://stackoverflow.com/a/1879223
+	local closest = clamp(circle.pos, box.pos-(box.dim/2), box.pos+(box.dim/2))
+	if circle.pos:dist2(closest) < (circle.radius*circle.radius) then
+		return true
+	end
+
+	return false
+end
+
+function collideLineCircle(line, circle)
+	assert(line.type == "line")
+	assert(circle.type == "circle")
+	-- from http://stackoverflow.com/a/1084899
+	local cd = line.extend
+	local cf = (line.pos-circle.pos)
+
+	local ca = cd*cd
+	local cb = 2*(cf*cd)
+	local cc = cf*cf - circle.radius*circle.radius
+
+	local discriminant = cb*cb-4*ca*cc
+	if discriminant < 0 then return false else
+		discriminant = math.sqrt(discriminant)
+		local t1 = (-cb - discriminant)/(2*ca)
+		local t2 = (-cb + discriminant)/(2*ca)
+		if t1 >= 0 and t1 <= 1 then
+			return true
+		end
+		if t2 >= 0 and t2 <= 1 then
+			return true
+		end
+	end
+
+	return false
+end
+
+function collideBoxBox(a, b)
+	assert(a.type == "aabox")
+	assert(b.type == "aabox")
+	print("Box/Box colission not implemented!")
+end
+
+function collideLineBox(line, box)
+	assert(line.type == "line")
+	assert(box.type == "aabox")
+	print("Line/Box colission not implemented!")
+end
 
 function Physics:collide(a, b)
 	if a.pos:dist2(b.pos) >= ((a.radius+b.radius)*(a.radius+b.radius)) then
@@ -50,37 +100,22 @@ function Physics:collide(a, b)
 		or (a.type == "circle" and b.type == "aabox") then
 		local box = (a.type == "aabox") and a or b
 		local circle = (a.type == "circle") and a or b
-		-- from http://stackoverflow.com/a/1879223
-		local closest = clamp(circle.pos, box.pos-(box.dim/2), box.pos+(box.dim/2))
-		if circle.pos:dist2(closest) < (circle.radius*circle.radius) then
-			return true
-		end
+		return collideBoxCircle(box, circle)
 	elseif (a.type == "line" and b.type == "circle")
 		or (a.type == "circle" and b.type == "line") then
 		local line = (a.type == "line") and a or b
 		local circle = (a.type == "circle") and a or b
-		-- from http://stackoverflow.com/a/1084899
-		local cd = line.extend
-		local cf = (line.pos-circle.pos)
-
-		local ca = cd*cd
-		local cb = 2*(cf*cd)
-		local cc = cf*cf - circle.radius*circle.radius
-
-		local discriminant = cb*cb-4*ca*cc
-		if discriminant < 0 then return false else
-			discriminant = math.sqrt(discriminant)
-			local t1 = (-cb - discriminant)/(2*ca)
-			local t2 = (-cb + discriminant)/(2*ca)
-			if t1 >= 0 and t1 <= 1 then
-				return true
-			end
-			if t2 >= 0 and t2 <= 1 then
-				return true
-			end
-		end
+		return collideLineCircle(line, circle)
+	elseif (a.type == "aabox" and b.type == "aabox") then
+		return collideBoxBox(a, b)
+	elseif (a.type == "line" and b.type == "aabox")
+		or (a.type == "aabox" and b.type == "line") then
+		local line = (a.type == "line") and a or b
+		local box = (a.type == "aabox") and a or b
+		return collideLineBox(line, box)
 	end
 
+	print("Should never fall through?")
 	return false
 end
 
