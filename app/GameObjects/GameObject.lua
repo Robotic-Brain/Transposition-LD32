@@ -40,6 +40,9 @@ end
 -- every GameObject MUST have a position
 function GameObject:setPosition(vec)
 	self.pos = vec
+	if self.collider then
+		self.collider:setPosition(self:getPosition())
+	end
 end
 
 function GameObject:getPosition()

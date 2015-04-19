@@ -4,13 +4,13 @@ TestGO = GameObject:new()
 
 function TestGO:draw()
 	love.graphics.push()
-	love.graphics.translate(self.pos:unpack())
+	love.graphics.translate(self:getPosition():unpack())
 	--love.graphics.print("Test", love.math.random() * 100, love.math.random() * 100)
 	--love.graphics.rectangle("fill", -10, -10, 20, 20)
 	--love.graphics.line(-10, -10, 10, 10)
 	love.graphics.line(-15, -10, 100, 100)
 	love.graphics.circle("fill", 0, 0, 10, 10)
-	love.graphics.print("Pos: "..tostring(self.pos), 0, 0)
+	love.graphics.print("Pos: "..tostring(self:getPosition()), 0, 0)
 	love.graphics.pop()
 end
 
@@ -24,4 +24,9 @@ function TestGO:onAddedToWorld()
 
 	--self:setPosition(Vector.new(10, 30))
 	--self.collider:setPosition(self:getPosition())
+end
+
+function TestGO:update(dt)
+	local time = self:getWorld().time
+	--self:setPosition(Vector.new(math.cos(time) * 100, math.sin(time) * 100))
 end

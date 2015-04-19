@@ -23,9 +23,9 @@ end
 
 function Player:draw()
 	love.graphics.push()
-	love.graphics.translate(self.pos:unpack())
+	love.graphics.translate(self:getPosition():unpack())
 	love.graphics.circle("fill", 0, 0, 20, 10)
-	love.graphics.print("Pos: "..tostring(self.pos), 0, 0)
+	love.graphics.print("Pos: "..tostring(self:getPosition()), 0, 0)
 	love.graphics.rotate(self.rot)
 	love.graphics.line(0, 0, self.range, 0)
 	love.graphics.translate(-16,-16)
@@ -39,7 +39,6 @@ function Player:update(dt)
 	self.rot = (b - (a / 2)):angleTo()
 
 	self:move(InputManager.getMovement() * self.speed * dt)
-	self.collider:setPosition(self:getPosition())
 
 	if InputManager:didFire() then self:onClick() end
 end
@@ -48,8 +47,10 @@ function Player:onClick()
 	local ray = Collider:newLine(self:getPosition(), self:getPosition()+Vector.new(self.range, 0):rotated(self.rot))
 	local matches = self:getWorld().physics:rayCast(ray)
 	if matches[1] == self.collider then table.remove(matches, 1) end
-	print(#matches)
-	for i=1,#matches do
-		print(matches[i]:getOwner():getName())
+	if #matches >= 1 then
+		print(matches[1]:getOwner():getName())
+		local newPos = matches[1]:getOwner():getPosition()
+		matches[1]:getOwner():setPosition(self:getPosition())
+		self:setPosition(newPos)
 	end
 end
