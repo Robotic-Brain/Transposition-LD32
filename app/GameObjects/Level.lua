@@ -6,12 +6,15 @@ Level = GameObject:new()
 
 Level._tiles = {}  -- this mapps a tileId to an immage
 Level._formatMap = {}  -- this mapps a character to a tileId
+Level._floorTiles = {"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","2","3"} -- contains floor tiles for random replacement
 for i=1,8 do
 	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
 	if i < 10 then
 		Level._formatMap[tostring(i)] = i
 	end
 end
+
+Level._formatMap["w"] = 8
 
 Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
 Level._solidIndex = 6	-- tiles below (excluding) this index are considered "transparent" for the teleport
