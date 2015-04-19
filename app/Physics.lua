@@ -15,11 +15,49 @@ end
 function Physics:init()
 	self.colliders = {}
 	self.icolliders = {}
+	self.collisionListeners = {}
 	self.free = {}
 	print("Initializing physics world!!!")
 	Physics._theWorld = love.physics.newWorld(0, 0)
 	self.pworld = Physics._theWorld
+	self.pworld:setCallbacks(
+		function (...)
+			return self:dispatchCollision("beginContact", ...)
+		end,
+		function (...)
+			return self:dispatchCollision("endContact", ...)
+		end,
+		function (...)
+			return self:dispatchCollision("preSolve", ...)
+		end,
+		function (...)
+			return self:dispatchCollision("postSolve", ...)
+		end
+		)
 	return self
+end
+
+function Physics:dispatchCollision(phase, ...)
+	assert(phase == "beginContact"
+		or phase == "endContact"
+		or phase == "preSolve"
+		or phase == "postSolve"
+		)
+	for k,v in pairs(self.collisionListeners) do
+		if type(k) == "function" then
+			k(phase, ...)
+		end
+	end
+end
+
+function Physics:addCollisionListener(fnc)
+	assert(type(fnc) == "function")
+	self.collisionListeners[fnc] = true
+end
+
+function Physics:addCollisionListener(fnc)
+	assert(type(fnc) == "function")
+	self.collisionListeners[fnc] = nil
 end
 
 function Physics:update(dt)
@@ -44,12 +82,6 @@ function Physics:rayCast(ray)
 		print("CastComp", a.pos, b.pos)
 		return a.pos > b.pos
 	end )
-	--[[local result2 = {}
-	for i=1,#objs do
-		table.insert(result2, objs[i].fix)
-	end]]
-
-	--return result2
 	return objs
 end
 
