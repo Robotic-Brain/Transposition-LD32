@@ -4,6 +4,8 @@ require("Physics")
 
 -- World or "level" object
 World = GameObject:new()
+World._sounds = {}
+World._sounds.enterLevel = love.audio.newSource("sounds/LevelEnter.wav")
 
 -- loads the given level
 function World:loadLevel( name )
@@ -12,7 +14,9 @@ function World:loadLevel( name )
 	print("Loading level: "..name)
 	require("levels."..name)(self)
 	package.loaded["levels."..name] = nil
-	love.window.setTitle(name)
+	love.window.setTitle("Level name: "..name)
+	World._sounds.enterLevel:play()
+
 end --]]
 
 function World:init()

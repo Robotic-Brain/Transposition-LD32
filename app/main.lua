@@ -6,6 +6,7 @@ require("GameObjects.Player")
 require("GameObjects.Level")
 require("GameObjects.Entity")
 require("GameObjects.TriggerZone")
+require("GameObjects.Decal")
 require("InputManager")
 
 THE_WORLD = nil
@@ -14,7 +15,7 @@ THE_WORLD = nil
 function love.load()
 	THE_WORLD = World:new()
 	THE_WORLD:init()
-	THE_WORLD:loadLevel("menu")
+	THE_WORLD:loadLevel("Menu")
 
 	print("Setup complete...")
 end

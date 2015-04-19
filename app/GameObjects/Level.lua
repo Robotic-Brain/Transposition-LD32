@@ -15,6 +15,8 @@ for i=1,8 do
 end
 
 Level._formatMap["w"] = 8
+table.insert(Level._tiles, love.graphics.newImage("images/ladder.png"))
+Level._formatMap["l"] = #Level._tiles
 
 Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
 Level._solidIndex = 6	-- tiles below (excluding) this index are considered "transparent" for the teleport
