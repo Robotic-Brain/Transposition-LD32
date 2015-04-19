@@ -1,4 +1,5 @@
 Vector = require("hump.vector")
+require("Collider")
 
 Physics = {}
 
@@ -87,7 +88,40 @@ end
 function collideLineBox(line, box)
 	assert(line.type == "line")
 	assert(box.type == "aabox")
-	print("Line/Box colission not implemented!")
+	local p0 = Vector.new(box.pos.x-box.dim.x, box.pos.y-box.dim.y)
+	local p1 = Vector.new(box.pos.x+box.dim.x, box.pos.y-box.dim.y)
+	local p2 = Vector.new(box.pos.x+box.dim.x, box.pos.y+box.dim.y)
+	local p3 = Vector.new(box.pos.x-box.dim.x, box.pos.y+box.dim.y)
+	local a = Collider:newLine(p0, p1)
+	local b = Collider:newLine(p1, p2)
+	local c = Collider:newLine(p2, p3)
+	local d = Collider:newLine(p3, p0)
+	if collideLineLine(line, a) then return true end
+	if collideLineLine(line, b) then return true end
+	if collideLineLine(line, c) then return true end
+	if collideLineLine(line, d) then return true end
+	return false -- this will return false if line is fully inside of box!!
+end
+
+function collideLineLine(a, b)
+	assert(a.type == "line")
+	assert(b.type == "line")
+	-- from http://stackoverflow.com/a/1968345
+	local p0 = a.pos
+	local p1 = a.pos+a.extend
+	local p2 = b.pos
+	local p3 = b.pos+b.extend
+
+	local s1 = a.extend
+	local s2 = b.extend
+
+	local s = (-s1.y * (p0.x - p2.x) + s1.x * (p0.y - p2.y)) / (-s2.x * s1.y + s1.x * s2.y);
+	local t = ( s2.x * (p0.y - p2.y) - s2.y * (p0.x - p2.x)) / (-s2.x * s1.y + s1.x * s2.y);
+
+	if s >= 0 and s <= 1 and t >= 0 and t <= 1 then
+		return true
+	end
+	return false
 end
 
 function Physics:collide(a, b)
@@ -113,6 +147,8 @@ function Physics:collide(a, b)
 		local line = (a.type == "line") and a or b
 		local box = (a.type == "aabox") and a or b
 		return collideLineBox(line, box)
+	elseif (a.type == "line" and b.type == "line") then
+		return collideLineLine(a, b)
 	end
 
 	print("Should never fall through?")
