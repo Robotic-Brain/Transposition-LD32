@@ -40,13 +40,27 @@ function Level:addLine( ... )
 	if #args == 4 then
 		a = Vector.new(args[1], args[2])
 		b = Vector.new(args[3], args[4])
-		print("addingBox: ", a, b)
 	else
 		a = args[1]
 		b = args[2]
 	end
+	print("addingLine: ", a, b)
 
 	self.collider:addChild(Collider:newLine(a,b))
+end
+
+-- add collision line args: start/end point
+function Level:addLineStrip( ... )
+	local args = { ... }
+	assert(#args >= 4)
+	assert(#args%2 == 0)
+	local prv = Vector.new(args[1], args[2])
+	for i=3,#args,2 do
+		local nxt = Vector.new(args[i], args[i+1])
+		print("addingLine: ", prv, nxt)
+		self.collider:addChild(Collider:newLine(prv, nxt))
+		prv = nxt
+	end
 end
 
 function Level:setDrawable(d)
