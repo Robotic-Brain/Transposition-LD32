@@ -52,12 +52,6 @@ function Player:onClick(mode)
 	local swap = false
 	for i=1,#matches do
 		local curMatch = matches[i].fix
-		print("Match",
-				curMatch:getOwner():getName(),
-				curMatch:getTag("moveable"),
-				curMatch:getTag("pierceable"),
-				curMatch:getTag("solid")
-			)
 		if curMatch ~= self.collider then
 			if curMatch:getTag("pierceable") then
 				-- ignore
@@ -78,8 +72,6 @@ function Player:onClick(mode)
 	end
 
 	if swap and swap:getTag("moveable") then
-		print(swap:getOwner():getName())
-
 		if mode == 1 then
 			local newPos = swap:getOwner():getPosition()
 			swap:getOwner():setPosition(self:getPosition())

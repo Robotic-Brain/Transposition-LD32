@@ -79,13 +79,11 @@ function Physics:rayCast(ray)
 		local result = {}
 		result.fix=f:getUserData()
 		result.pos=t
-		print("CastCollide", result.fix, result.pos)
 		table.insert(objs, result)
 		return -1 --keep going
 	end)
 
 	table.sort( objs, function (a, b)
-		print("CastComp", a.pos, b.pos)
 		return a.pos > b.pos
 	end )
 	return objs
