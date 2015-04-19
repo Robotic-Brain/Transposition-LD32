@@ -15,6 +15,7 @@ function GameObject:init()
 	print("Initializing GameObject")
 	self:setPosition(Vector.new())
 	self:setName("Generic GO")
+	self:setDrawLayer(0)
 	return self
 end
 
@@ -26,6 +27,15 @@ end
 -- public: render update
 function GameObject:draw()
 	-- body
+end
+
+function GameObject:setDrawLayer(layer)
+	self.drawLayer = layer
+	return self
+end
+
+function GameObject:getDrawLayer()
+	return self.drawLayer
 end
 
 function GameObject:setName(name)

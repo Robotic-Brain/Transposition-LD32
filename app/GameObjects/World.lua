@@ -66,8 +66,15 @@ function World:draw()
 	love.graphics.push()
 	love.graphics.translate(self.pos:unpack())
 	love.graphics.translate(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+	local drawQueue = {}
 	for k,v in pairs(self.objects) do
-		k:draw()
+		table.insert(drawQueue, k)
+	end
+	table.sort(drawQueue, function (a, b)
+		return a:getDrawLayer() < b:getDrawLayer()
+	end)
+	for i=1,#drawQueue do
+		drawQueue[i]:draw()
 	end
 	love.graphics.pop()
 end

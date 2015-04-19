@@ -14,6 +14,7 @@ function Player:init()
 	self.image = love.graphics.newImage("images/Player.png")
 	self.lastPos = self:getPosition()
 	self.collider = Collider:newCircle(10):setOwner(self)
+	self:setDrawLayer(100)
 	return self
 end
 
