@@ -40,7 +40,7 @@ function clamp(v, min, max)
 		math.min(math.max(min.y, v.y), max.y)
 		)
 end
-function collideBoxCircle(box, circle)
+function Physics:collideBoxCircle(box, circle)
 	assert(box.type == "aabox")
 	assert(circle.type == "circle")
 	-- from http://stackoverflow.com/a/1879223
@@ -52,7 +52,7 @@ function collideBoxCircle(box, circle)
 	return false
 end
 
-function collideLineCircle(line, circle)
+function Physics:collideLineCircle(line, circle)
 	assert(line.type == "line")
 	assert(circle.type == "circle")
 	-- from http://stackoverflow.com/a/1084899
@@ -79,13 +79,13 @@ function collideLineCircle(line, circle)
 	return false
 end
 
-function collideBoxBox(a, b)
+function Physics:collideBoxBox(a, b)
 	assert(a.type == "aabox")
 	assert(b.type == "aabox")
 	print("Box/Box colission not implemented!")
 end
 
-function collideLineBox(line, box)
+function Physics:collideLineBox(line, box)
 	assert(line.type == "line")
 	assert(box.type == "aabox")
 	local p0 = Vector.new(box.pos.x-box.dim.x, box.pos.y-box.dim.y)
@@ -103,7 +103,7 @@ function collideLineBox(line, box)
 	return false -- this will return false if line is fully inside of box!!
 end
 
-function collideLineLine(a, b)
+function Physics:collideLineLine(a, b)
 	assert(a.type == "line")
 	assert(b.type == "line")
 	-- from http://stackoverflow.com/a/1968345
@@ -124,16 +124,16 @@ function collideLineLine(a, b)
 	return false
 end
 
-function collideCompoundCompound(a, b)
+function Physics:collideCompoundCompound(a, b)
 	assert(a.type == "compound")
 	assert(b.type == "compound")
 	print("Compound/Compound colission not implemented!")
 end
 
-function collideCompoundAny(compound, other)
+function Physics:collideCompoundAny(compound, other)
 	assert(compound.type == "compound")
 	assert(other.type ~= "compound")
-	print("Compound/Any colission not implemented!")
+	
 end
 
 function Physics:collide(a, b)
@@ -141,10 +141,10 @@ function Physics:collide(a, b)
 		return false
 	end
 	if a.type == "compound" or b.type == "compound" then
-		if a.type == b.type then return collideCompoundCompound(a, b) else
+		if a.type == b.type then return self:collideCompoundCompound(a, b) else
 			local compound = (a.type == "compound") and a or b
 			local other = (a.type ~= "compound") and a or b
-			return collideCompoundAny(compound, other)
+			return self:collideCompoundAny(compound, other)
 		end
 
 	elseif a.type == "circle" and b.type == "circle" then
@@ -153,21 +153,21 @@ function Physics:collide(a, b)
 		or (a.type == "circle" and b.type == "aabox") then
 		local box = (a.type == "aabox") and a or b
 		local circle = (a.type == "circle") and a or b
-		return collideBoxCircle(box, circle)
+		return self:collideBoxCircle(box, circle)
 	elseif (a.type == "line" and b.type == "circle")
 		or (a.type == "circle" and b.type == "line") then
 		local line = (a.type == "line") and a or b
 		local circle = (a.type == "circle") and a or b
-		return collideLineCircle(line, circle)
+		return self:collideLineCircle(line, circle)
 	elseif (a.type == "aabox" and b.type == "aabox") then
-		return collideBoxBox(a, b)
+		return self:collideBoxBox(a, b)
 	elseif (a.type == "line" and b.type == "aabox")
 		or (a.type == "aabox" and b.type == "line") then
 		local line = (a.type == "line") and a or b
 		local box = (a.type == "aabox") and a or b
-		return collideLineBox(line, box)
+		return self:collideLineBox(line, box)
 	elseif (a.type == "line" and b.type == "line") then
-		return collideLineLine(a, b)
+		return self:collideLineLine(a, b)
 	end
 
 	print("Should never fall through?")
