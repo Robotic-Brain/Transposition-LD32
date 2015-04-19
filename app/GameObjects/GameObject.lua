@@ -85,14 +85,26 @@ end
 
 -- protected: Should only be called by World
 function GameObject:setWorld(world)
-	self.world = world
-	self:onAddedToWorld()
+	if world then
+		self.world = world
+		self:onAddedToWorld()
+	else
+		self:onRemoveFromWorld()
+		self.world = world
+	end
 end
 
 function GameObject:onAddedToWorld()
 	print("OnWorldAdded: "..self:getName())
 	if self.collider then
 		self:getWorld().physics:addCollider(self.collider)
+	end
+end
+
+function GameObject:onRemoveFromWorld()
+	print("OnWorldRemoved: "..self:getName())
+	if self.collider then
+		self:getWorld().physics:removeCollider(self.collider)
 	end
 end
 

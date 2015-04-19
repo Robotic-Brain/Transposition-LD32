@@ -33,6 +33,8 @@ function World:destroy()
 	if self.follow then
 		self.follow:destroy()
 	end
+
+	self.physics:destroy()
 end
 
 -- public: adds object to world and sets world of object

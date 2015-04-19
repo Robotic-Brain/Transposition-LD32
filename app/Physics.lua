@@ -37,6 +37,10 @@ function Physics:init()
 	return self
 end
 
+function Physics:destroy()
+	Physics._theWorld:destroy()
+end
+
 function Physics:dispatchCollision(phase, ...)
 	assert(phase == "beginContact"
 		or phase == "endContact"
@@ -52,11 +56,13 @@ end
 
 function Physics:addCollisionListener(fnc)
 	assert(type(fnc) == "function")
+	print("Collision listener added")
 	self.collisionListeners[fnc] = true
 end
 
-function Physics:addCollisionListener(fnc)
+function Physics:removeCollisionListener(fnc)
 	assert(type(fnc) == "function")
+	print("Collision listener removed")
 	self.collisionListeners[fnc] = nil
 end
 
