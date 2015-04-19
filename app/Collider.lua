@@ -7,6 +7,7 @@ function Collider:new(o)
 	o = o or {type="none", radius=0}
 	setmetatable(o, self)
 	self.__index = self
+	o.tags = {}
 	o:setPosition(Vector.new())
 	return o
 end
@@ -78,6 +79,20 @@ end
 function Collider:getOwner()
 	assert(self.owner)
 	return self.owner
+end
+
+function Collider:setTag(t, enable)
+	if enable == nil then
+		self.tags[t] = true
+	else
+		self.tags[t] = enable
+	end
+	print("Tag:", self.tags[t])
+	return self
+end
+
+function Collider:getTag(t)
+	return self.tags[t]
 end
 
 function Collider:onCollision(other)

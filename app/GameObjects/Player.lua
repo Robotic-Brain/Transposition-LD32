@@ -41,10 +41,28 @@ end
 function Player:onClick()
 	local ray = Collider:newLine(self:getPosition(), self:getPosition()+Vector.new(self.range, 0):rotated(self.rot))
 	local matches = self:getWorld().physics:rayCast(ray)
-	if matches[1] == self.collider then table.remove(matches, 1) end
-	if #matches >= 1 then
-		local newPos = matches[1]:getOwner():getPosition()
-		matches[1]:getOwner():setPosition(self:getPosition())
+	--if matches[1] == self.collider then table.remove(matches, 1) end
+	local swap = false
+	for i=1,#matches do
+		print("Match", matches[i].type)
+		if matches[i] ~= self.collider then
+			if matches[i]:getTag("moveable") then
+				-- hit moveable object
+				swap = matches[i]
+				break
+			elseif matches[i]:getTag("pierceable") then
+				-- ignore
+			else
+				-- hit wall
+				-- break
+			end
+		end
+	end
+
+	if swap then
+		print(swap:getOwner():getName())
+		local newPos = swap:getOwner():getPosition()
+		swap:getOwner():setPosition(self:getPosition())
 		self:setPosition(newPos)
 	end
 end

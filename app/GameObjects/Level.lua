@@ -9,6 +9,8 @@ for i=1,8 do
 	Level._tiles[i] = love.graphics.newImage("images/tile0"..i..".png")
 end
 Level._obstacleIndex = 5 -- tiles above (including) this index are considered to be solid
+Level._solidIndex = 6	-- tiles below (excluding) this index are considered "transparent" for the teleport
+						-- if a collider gets created below this index, it gets the tag "pierceable"
 
 function Level:init()
 	GameObject.init(self)
