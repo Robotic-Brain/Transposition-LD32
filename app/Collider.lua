@@ -22,9 +22,11 @@ end
 
 -- public: new circle collider with radius
 function Collider:newCircle(r, dynHint)
+	if type(dynHint) ~= "string" then dynHint = dynHint and "dynamic" or "static" end
+	assert(type(dynHint) == "string")
 	local o = self:new{
 		fixture=love.physics.newFixture(
-			love.physics.newBody(Physics._theWorld,0,0, dynHint and "dynamic" or "static"),
+			love.physics.newBody(Physics._theWorld,0,0, dynHint),
 			love.physics.newCircleShape(r), 1)
 	}
 	o.fixture:setUserData(o)
@@ -49,9 +51,11 @@ end]]
 
 -- public: new Axis aligned Box collider with width/height
 function Collider:newAABox(w, h, dynHint)
+	if type(dynHint) ~= "string" then dynHint = dynHint and "dynamic" or "static" end
+	assert(type(dynHint) == "string")
 	local o = self:new{
 		fixture=love.physics.newFixture(
-			love.physics.newBody(Physics._theWorld,0,0, dynHint and "dynamic" or "static"),
+			love.physics.newBody(Physics._theWorld,0,0, dynHint),
 			love.physics.newRectangleShape(w, h), 1)
 	}
 	o.fixture:setUserData(o)
