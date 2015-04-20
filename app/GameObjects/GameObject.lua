@@ -85,7 +85,15 @@ end
 
 -- alias for destroy but with effects
 function GameObject:die()
+	if self.deathListener then self.deathListener(self) end
 	self:destroy()
+end
+
+function GameObject:listenForDeath(l)
+	print(l)
+	assert(type(l) == "function")
+	self.deathListener = l
+	return self
 end
 
 -- protected: Should only be called by World

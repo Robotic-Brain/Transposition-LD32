@@ -11,7 +11,7 @@ Level._formatMap["l"] = love.graphics.newImage("images/ladder.png"); Level._tagM
 Level._formatMap["1"] = love.graphics.newImage("images/tile01.png"); Level._tagMap["1"] = "floor"
 Level._formatMap["2"] = love.graphics.newImage("images/tile02.png"); Level._tagMap["2"] = "floor"
 Level._formatMap["3"] = love.graphics.newImage("images/tile03.png"); Level._tagMap["3"] = "floor"
-Level._formatMap["4"] = love.graphics.newImage("images/tile04.png"); Level._tagMap["4"] = "floor"
+Level._formatMap["x"] = love.graphics.newImage("images/tile04.png"); Level._tagMap["x"] = "floor"
 Level._formatMap["s"] = love.graphics.newImage("images/tile05.png"); Level._tagMap["s"] = "pierceable"
 Level._formatMap["D"] = love.graphics.newImage("images/tile06.png"); Level._tagMap["D"] = "solid"
 Level._formatMap["d"] = love.graphics.newImage("images/tile07.png"); Level._tagMap["d"] = "solid"
